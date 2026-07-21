@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Clever Dictate | System Initialization</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline-variant": "#424754",
+                        "outline": "#8c909f",
+                        "on-tertiary-fixed": "#002113",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "on-secondary-fixed-variant": "#5516be",
+                        "tertiary-container": "#00a572",
+                        "on-secondary-container": "#c4abff",
+                        "inverse-primary": "#005ac2",
+                        "error": "#ffb4ab",
+                        "on-background": "#e3e2e5",
+                        "on-primary-fixed": "#001a42",
+                        "surface-container-highest": "#343537",
+                        "on-tertiary": "#003824",
+                        "primary-container": "#4d8eff",
+                        "on-error": "#690005",
+                        "error-container": "#93000a",
+                        "surface-variant": "#343537",
+                        "secondary-fixed-dim": "#d0bcff",
+                        "primary-fixed-dim": "#adc6ff",
+                        "primary": "#adc6ff",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "tertiary": "#4edea3",
+                        "on-secondary": "#3c0091",
+                        "inverse-surface": "#e3e2e5",
+                        "surface": "#121315",
+                        "on-error-container": "#ffdad6",
+                        "surface-bright": "#38393b",
+                        "secondary-container": "#571bc1",
+                        "surface-tint": "#adc6ff",
+                        "on-tertiary-container": "#00311f",
+                        "primary-fixed": "#d8e2ff",
+                        "surface-container-low": "#1b1c1e",
+                        "background": "#121315",
+                        "on-primary": "#002e6a",
+                        "on-surface-variant": "#c2c6d6",
+                        "on-primary-fixed-variant": "#004395",
+                        "surface-container-high": "#292a2c",
+                        "surface-container": "#1f2022",
+                        "on-surface": "#e3e2e5",
+                        "secondary-fixed": "#e9ddff",
+                        "tertiary-fixed": "#6ffbbe",
+                        "surface-container-lowest": "#0d0e10",
+                        "secondary": "#d0bcff",
+                        "on-primary-container": "#00285d",
+                        "on-secondary-fixed": "#23005c",
+                        "surface-dim": "#121315",
+                        "inverse-on-surface": "#303033"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "margin-mobile": "16px",
+                        "gutter": "16px",
+                        "margin-desktop": "24px",
+                        "container-max": "1440px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "code-md": ["JetBrains Mono"],
+                        "body-lg": ["Inter"],
+                        "headline-xl": ["Inter"],
+                        "label-sm": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "code-md": ["14px", {"lineHeight": "20px", "fontWeight": "450"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-xl": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #0A0B0D;
+            color: #e3e2e5;
+            -webkit-font-smoothing: antialiased;
+        }
+        .tonal-card {
+            background-color: #12141C;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        }
+        .primary-glow-focus:focus-within {
+            border-color: #3B82F6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+        }
+        .progress-bar-animate {
+            background: linear-gradient(90deg, #3B82F6 0%, #8B5CF6 100%);
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex overflow-hidden">
+<!-- Onboarding Shell: 40/60 Asymmetrical Layout -->
+<main class="flex w-full h-screen">
+<!-- Left Column: Branding & Core Narrative (40%) -->
+<section class="w-[40%] bg-surface-container-lowest relative flex flex-col justify-center px-12 border-r border-outline-variant/30">
+<!-- Background Visual Layer -->
+
+<div class="relative z-10 space-y-8">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-headline-xl">terminal</span>
+<h1 class="font-headline-lg text-headline-lg font-bold tracking-tight text-on-surface">Clever Dictate</h1>
+</div>
+<div class="space-y-4 max-w-md">
+<h2 class="font-headline-xl text-headline-xl text-on-surface leading-tight">
+                        Initializing Core Architecture
+                    </h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
+                        Establishing a secure, local-first environment. Our architecture prioritizes 
+                        <span class="text-primary font-medium">GPU-accelerated local inference</span> to ensure 
+                        zero-latency processing and absolute data privacy.
+                    </p>
+</div>
+<div class="pt-8 grid grid-cols-2 gap-6 border-t border-outline-variant/20">
+<div>
+<div class="font-label-sm text-label-sm text-outline uppercase mb-1">Local Node Status</div>
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span>
+<span class="font-code-md text-code-md text-tertiary">Active Pipeline</span>
+</div>
+</div>
+<div>
+<div class="font-label-sm text-label-sm text-outline uppercase mb-1">Compute Type</div>
+<div class="font-code-md text-code-md text-on-surface">Hardware Native</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Right Column: Provisioning Flow (60%) -->
+<section class="w-[60%] bg-surface flex flex-col items-center justify-center p-margin-desktop overflow-y-auto">
+<div class="w-full max-w-2xl space-y-6">
+<!-- Card 1: Hardware Benchmark -->
+<div class="tonal-card p-6 rounded-xl flex flex-col gap-4">
+<div class="flex justify-between items-start">
+<div class="space-y-1">
+<label class="font-label-sm text-label-sm text-outline uppercase">Module 01 / Hardware</label>
+<h3 class="font-headline-md text-headline-md text-on-surface">Hardware Benchmark</h3>
+</div>
+<div class="flex items-center gap-2 bg-tertiary/10 text-tertiary px-3 py-1 rounded-full border border-tertiary/20">
+<span class="material-symbols-outlined text-[16px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="font-label-sm text-label-sm">Verified</span>
+</div>
+</div>
+<div class="flex items-center gap-4 p-4 bg-surface-container-low rounded-lg border border-outline-variant/30">
+<div class="w-12 h-12 flex items-center justify-center bg-primary-container/20 rounded-lg text-primary">
+<span class="material-symbols-outlined text-[32px]">memory</span>
+</div>
+<div class="flex-1">
+<div class="font-body-md text-body-md text-on-surface font-semibold">Apple Silicon / NVIDIA RTX GPU Detected</div>
+<div class="font-code-md text-code-md text-on-surface-variant">Available VRAM: 12GB - Optimal for Local Inference</div>
+</div>
+</div>
+</div>
+<!-- Card 2: Model Weights Manager -->
+<div class="tonal-card p-6 rounded-xl flex flex-col gap-4">
+<div class="space-y-1">
+<label class="font-label-sm text-label-sm text-outline uppercase">Module 02 / Inference</label>
+<h3 class="font-headline-md text-headline-md text-on-surface">Model Weights Manager</h3>
+</div>
+<div class="overflow-hidden border border-outline-variant/30 rounded-lg">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-high">
+<tr>
+<th class="p-3 font-label-sm text-label-sm text-outline border-b border-outline-variant/30">Model ID</th>
+<th class="p-3 font-label-sm text-label-sm text-outline border-b border-outline-variant/30">Size</th>
+<th class="p-3 font-label-sm text-label-sm text-outline border-b border-outline-variant/30 text-right">Status</th>
+</tr>
+</thead>
+<tbody class="bg-surface-container-low font-code-md text-code-md">
+<tr>
+<td class="p-3 border-b border-outline-variant/20 text-on-surface">Distil-Whisper-v3</td>
+<td class="p-3 border-b border-outline-variant/20 text-on-surface-variant">750MB</td>
+<td class="p-3 border-b border-outline-variant/20 text-right text-tertiary">
+<span class="material-symbols-outlined">check_circle</span>
+</td>
+</tr>
+<tr>
+<td class="p-3 text-on-surface">Moondream2-Quantized</td>
+<td class="p-3 text-on-surface-variant">1.5GB</td>
+<td class="p-3 text-right text-primary">
+<span class="animate-pulse">68%</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between font-label-sm text-label-sm">
+<span class="text-on-surface-variant">Downloading Moondream2...</span>
+<span class="text-on-surface">42.5 MB/s</span>
+</div>
+<div class="w-full h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="progress-bar-animate h-full w-[68%]"></div>
+</div>
+</div>
+</div>
+<!-- Card 3: System Permissions -->
+<div class="tonal-card p-6 rounded-xl flex flex-col gap-4">
+<div class="space-y-1">
+<label class="font-label-sm text-label-sm text-outline uppercase">Module 03 / System</label>
+<h3 class="font-headline-md text-headline-md text-on-surface">System Permissions</h3>
+</div>
+<div class="grid grid-cols-1 gap-3">
+<button class="permission-btn flex items-center justify-between p-4 rounded-lg border border-outline-variant/40 bg-transparent hover:bg-surface-container-high transition-all group" onclick="togglePermission(this)">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors">accessibility_new</span>
+<span class="font-body-md text-body-md text-on-surface">Grant Accessibility API Access</span>
+</div>
+<span class="status-icon material-symbols-outlined text-outline">radio_button_unchecked</span>
+</button>
+<button class="permission-btn flex items-center justify-between p-4 rounded-lg border border-outline-variant/40 bg-transparent hover:bg-surface-container-high transition-all group" onclick="togglePermission(this)">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors">screen_record</span>
+<span class="font-body-md text-body-md text-on-surface">Authorize Screen Recording</span>
+</div>
+<span class="status-icon material-symbols-outlined text-outline">radio_button_unchecked</span>
+</button>
+</div>
+</div>
+<!-- Footer Action -->
+<div class="flex justify-end pt-4">
+<button class="bg-primary/20 text-on-surface-variant cursor-not-allowed px-8 py-3 rounded-lg font-headline-md text-headline-md transition-all flex items-center gap-2" disabled="" id="finalStepBtn">
+                        Complete Initialization
+                        <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+</div>
+</section>
+</main>
+<script>
+        function togglePermission(btn) {
+            const isGranted = btn.classList.contains('bg-primary-container');
+            const icon = btn.querySelector('.status-icon');
+            
+            if (!isGranted) {
+                // Activate
+                btn.classList.remove('bg-transparent', 'border-outline-variant/40');
+                btn.classList.add('bg-primary-container', 'text-on-primary-container', 'border-primary');
+                btn.querySelector('.text-on-surface').classList.replace('text-on-surface', 'text-on-primary-container');
+                btn.querySelector('span:first-child').classList.replace('text-outline', 'text-on-primary-container');
+                icon.innerText = 'check_circle';
+                icon.classList.replace('text-outline', 'text-on-primary-container');
+                icon.style.fontVariationSettings = "'FILL' 1";
+            } else {
+                // Deactivate
+                btn.classList.add('bg-transparent', 'border-outline-variant/40');
+                btn.classList.remove('bg-primary-container', 'text-on-primary-container', 'border-primary');
+                btn.querySelector('.text-on-primary-container').classList.replace('text-on-primary-container', 'text-on-surface');
+                btn.querySelector('span:first-child').classList.replace('text-on-primary-container', 'text-outline');
+                icon.innerText = 'radio_button_unchecked';
+                icon.classList.replace('text-on-primary-container', 'text-outline');
+                icon.style.fontVariationSettings = "'FILL' 0";
+            }
+
+            checkAllPermissions();
+        }
+
+        function checkAllPermissions() {
+            const btns = document.querySelectorAll('.permission-btn');
+            const allActive = Array.from(btns).every(b => b.classList.contains('bg-primary-container'));
+            const finalBtn = document.getElementById('finalStepBtn');
+
+            if (allActive) {
+                finalBtn.disabled = false;
+                finalBtn.classList.remove('bg-primary/20', 'text-on-surface-variant', 'cursor-not-allowed');
+                finalBtn.classList.add('bg-primary', 'text-on-primary', 'shadow-lg', 'shadow-primary/20');
+            } else {
+                finalBtn.disabled = true;
+                finalBtn.classList.add('bg-primary/20', 'text-on-surface-variant', 'cursor-not-allowed');
+                finalBtn.classList.remove('bg-primary', 'text-on-primary', 'shadow-lg', 'shadow-primary/20');
+            }
+        }
+    </script>
+</body></html>

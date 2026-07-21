@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Clever Dictate - Active Desktop Overlay</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .acrylic-glass {
+            background: rgba(18, 20, 28, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .pulse-emerald {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: .5; transform: scale(1.1); }
+        }
+        .shimmer-progress {
+            background: linear-gradient(90deg, #12141C 0%, #3B82F6 50%, #12141C 100%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite linear;
+        }
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        .vlm-flash {
+            animation: flash-border 2s infinite ease-in-out;
+        }
+        @keyframes flash-border {
+            0%, 100% { border-color: rgba(139, 92, 246, 0.3); }
+            50% { border-color: rgba(139, 92, 246, 1); box-shadow: 0 0 10px rgba(139, 92, 246, 0.4); }
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline-variant": "#424754",
+                        "outline": "#8c909f",
+                        "tertiary": "#4edea3",
+                        "primary": "#adc6ff",
+                        "surface": "#121315",
+                        "background": "#121315",
+                        "surface-container-low": "#1b1c1e",
+                        "surface-container": "#1f2022",
+                        "on-surface": "#e3e2e5",
+                        "on-surface-variant": "#c2c6d6",
+                        "secondary-container": "#571bc1",
+                        "on-secondary-container": "#c4abff",
+                        "error": "#ffb4ab"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Inter"],
+                        "label-sm": ["JetBrains Mono"],
+                        "code-md": ["JetBrains Mono"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "code-md": ["14px", {"lineHeight": "20px", "fontWeight": "450"}]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-[#0A0B0D] min-h-screen flex flex-col items-center justify-center gap-12 p-10 font-body-md overflow-hidden relative">
+<!-- Ambient Desktop Background Simulation -->
+<div class="absolute inset-0 z-0 opacity-40">
+
+</div>
+<!-- MAIN CANVAS AREA -->
+<main class="relative z-10 w-full max-w-4xl flex flex-col md:flex-row items-center justify-around gap-12">
+<!-- COMPONENT A: System Tray Menu (Simulated context menu) -->
+<div class="w-[240px] bg-surface-container shadow-2xl rounded-lg border border-outline-variant flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-300">
+<!-- Header Section -->
+<div class="p-4 flex flex-col gap-3 bg-surface-container-low">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-on-surface-variant text-[10px] uppercase">Node Status</span>
+<div class="w-2 h-2 rounded-full bg-[#10B981] pulse-emerald"></div>
+</div>
+<div class="flex flex-col gap-1">
+<h3 class="font-headline-md text-sm text-on-surface">Local Node: Idle</h3>
+<p class="font-label-sm text-[10px] text-outline">v2.4.1-stable</p>
+</div>
+<div class="flex flex-col gap-1.5">
+<div class="flex justify-between text-[10px] font-label-sm text-primary">
+<span>Cloud Ledger Syncing...</span>
+<span>82%</span>
+</div>
+<div class="h-[2px] w-full bg-outline-variant rounded-full overflow-hidden">
+<div class="h-full shimmer-progress w-[82%]"></div>
+</div>
+</div>
+</div>
+<!-- Action Items -->
+<div class="flex flex-col">
+<button class="flex items-center justify-between px-4 py-3 hover:bg-surface-variant transition-colors group">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-on-surface-variant group-hover:text-primary" style="font-size: 18px;">open_in_new</span>
+<span class="text-xs text-on-surface">Open Control Workspace</span>
+</div>
+<span class="font-label-sm text-[10px] text-outline">⌘O</span>
+</button>
+<div class="h-[1px] bg-outline-variant mx-4"></div>
+<div class="flex items-center justify-between px-4 py-3 hover:bg-surface-variant transition-colors">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-on-surface-variant" style="font-size: 18px;">cloud_sync</span>
+<span class="text-xs text-on-surface">Cloud Fallback Mode</span>
+</div>
+<!-- Toggle Switch -->
+<div class="relative inline-flex items-center cursor-pointer">
+<div class="w-8 h-4 bg-[#3B82F6] rounded-full"></div>
+<div class="absolute right-0.5 top-0.5 bg-white w-3 h-3 rounded-full shadow-sm"></div>
+</div>
+</div>
+<div class="h-[1px] bg-outline-variant mx-4"></div>
+<button class="flex items-center gap-3 px-4 py-3 hover:bg-error-container/20 transition-colors group">
+<span class="material-symbols-outlined text-outline group-hover:text-error" style="font-size: 18px;">power_settings_new</span>
+<span class="text-xs text-on-surface group-hover:text-error">Terminate Daemon</span>
+</button>
+</div>
+<!-- Footer Branding -->
+<div class="px-4 py-2 bg-surface-container-highest flex justify-center">
+<span class="font-label-sm text-[9px] text-outline uppercase tracking-[0.2em]">Clever Dictate Engine</span>
+</div>
+</div>
+<!-- COMPONENT B: Floating Dictation Pill HUD -->
+<div class="flex flex-col gap-6 items-center">
+<!-- HUD: Normal / Active State -->
+<div class="w-[320px] h-[52px] acrylic-glass rounded-full flex items-center px-4 gap-3 vlm-flash relative overflow-hidden">
+<!-- Visualizer -->
+<div class="flex items-center gap-1 w-16 overflow-hidden">
+<div class="w-[3px] h-3 bg-[#10B981] rounded-full animate-[pulse_1s_infinite]"></div>
+<div class="w-[3px] h-6 bg-[#10B981] rounded-full animate-[pulse_1.2s_infinite]"></div>
+<div class="w-[3px] h-4 bg-[#10B981] rounded-full animate-[pulse_0.8s_infinite]"></div>
+<div class="w-[3px] h-7 bg-[#10B981] rounded-full animate-[pulse_1.5s_infinite]"></div>
+<div class="w-[3px] h-3 bg-[#10B981] rounded-full animate-[pulse_1.1s_infinite]"></div>
+</div>
+<div class="w-[1px] h-6 bg-outline-variant"></div>
+<!-- Target Badge -->
+<div class="flex flex-1 items-center gap-2 overflow-hidden">
+<span class="material-symbols-outlined text-[#8B5CF6]" style="font-size: 18px; font-variation-settings: 'FILL' 1;">videocam</span>
+<div class="flex flex-col min-w-0">
+<span class="font-label-sm text-[10px] text-outline-variant uppercase">Target Context</span>
+<span class="font-code-md text-[11px] text-on-surface truncate">🎯 Slack (Desktop App)</span>
+</div>
+</div>
+<!-- Action / Indicator -->
+<div class="flex items-center">
+<div class="w-2 h-2 rounded-full bg-[#8B5CF6] shadow-[0_0_8px_#8B5CF6]"></div>
+</div>
+</div>
+<!-- HUD: Processing Error State -->
+<div class="w-[320px] h-[52px] bg-[#12141C] border border-error/30 rounded-full flex items-center px-4 gap-3 group cursor-pointer hover:border-error transition-all">
+<span class="material-symbols-outlined text-error" style="font-size: 20px;">warning</span>
+<div class="flex flex-col flex-1 min-w-0">
+<span class="font-label-sm text-[10px] text-error/60 uppercase">System Exception</span>
+<span class="font-code-md text-[11px] text-error truncate">LLM VRAM Overflow - Retrying...</span>
+</div>
+<button class="w-8 h-8 rounded-full flex items-center justify-center hover:bg-error/10 transition-colors">
+<span class="material-symbols-outlined text-error" style="font-size: 18px;">refresh</span>
+</button>
+</div>
+<p class="text-outline text-[11px] font-label-sm text-center max-w-[240px]">
+                HUD persists on top of all windows during active dictation sessions. Use <code class="bg-surface-variant px-1 rounded">Alt + Tab</code> to cycle.
+            </p>
+</div>
+</main>
+<!-- UI Background Elements (Subtle Technical Accents) -->
+<div class="fixed top-6 left-6 flex items-center gap-4 z-50">
+<div class="w-10 h-10 flex items-center justify-center bg-surface-container border border-outline-variant rounded-lg">
+<span class="material-symbols-outlined text-primary">terminal</span>
+</div>
+<div class="flex flex-col">
+<h1 class="font-headline-lg text-lg text-on-surface tracking-tight">Clever Dictate</h1>
+<div class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-[#10B981]"></span>
+<span class="font-label-sm text-[10px] text-outline uppercase tracking-widest">Active Shell v0.98-beta</span>
+</div>
+</div>
+</div>
+<!-- Inline Script for Micro-interactions -->
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Simulate the "Capture Flash" effect on the HUD intermittently
+            const hud = document.querySelector('.vlm-flash');
+            setInterval(() => {
+                hud.style.backgroundColor = 'rgba(139, 92, 246, 0.1)';
+                setTimeout(() => {
+                    hud.style.backgroundColor = 'rgba(18, 20, 28, 0.8)';
+                }, 150);
+            }, 5000);
+
+            // Button Hover sounds simulation or logic could go here
+            const buttons = document.querySelectorAll('button');
+            buttons.forEach(btn => {
+                btn.addEventListener('mouseenter', () => {
+                    // Logic for hover state sounds or haptics would go here
+                });
+            });
+        });
+    </script>
+</body></html>

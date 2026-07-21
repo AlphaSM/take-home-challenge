@@ -1,0 +1,63 @@
+{
+  "name": "clever-dictate-desktop",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Clever Dictate packaged as a desktop app (Electron shell around the Next.js standalone server).",
+  "main": "main.js",
+  "scripts": {
+    "dev": "electron .",
+    "prepare-db": "node scripts/prepare-db.mjs",
+    "dist:win": "electron-builder --win nsis portable",
+    "dist:mac": "electron-builder --mac dmg zip"
+  },
+  "devDependencies": {
+    "electron": "^33.2.1",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.makglobal.cleverdictate",
+    "productName": "Clever Dictate",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "main.js",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "../.next/standalone",
+        "to": "standalone",
+        "filter": ["**/*"]
+      },
+      {
+        "from": "../.next/static",
+        "to": "static",
+        "filter": ["**/*"]
+      },
+      {
+        "from": "resources/template.db",
+        "to": "template.db"
+      }
+    ],
+    "win": {
+      "target": [
+        { "target": "nsis", "arch": ["x64"] },
+        { "target": "portable", "arch": ["x64"] }
+      ],
+      "signAndEditExecutable": false
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    },
+    "mac": {
+      "target": [
+        { "target": "dmg", "arch": ["x64", "arm64"] },
+        { "target": "zip", "arch": ["x64", "arm64"] }
+      ],
+      "category": "public.app-category.productivity"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      AUTH_SECRET: "dev-secret-change-me-in-production"
+      VLM_PROVIDER: "mock"
+      LLM_PROVIDER: "mock"
+      DATABASE_URL: "file:/data/clever.db"
+    volumes:
+      - clever-data:/data
+    restart: unless-stopped
+
+volumes:
+  clever-data:

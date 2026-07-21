@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Clever Dictate - Settings &amp; Customization</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Custom Scrollbar for High-Density UI */
+        ::-webkit-scrollbar { width: 4px; height: 4px; }
+        ::-webkit-scrollbar-track { background: #0d0e10; }
+        ::-webkit-scrollbar-thumb { background: #343537; border-radius: 2px; }
+        ::-webkit-scrollbar-thumb:hover { background: #8c909f; }
+
+        /* Glass highlight effect from Style Guidance */
+        .glass-edge {
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.12);
+        }
+        
+        .active-tab-indicator {
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background-color: #adc6ff;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline-variant": "#424754",
+                        "outline": "#8c909f",
+                        "on-tertiary-fixed": "#002113",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "on-secondary-fixed-variant": "#5516be",
+                        "tertiary-container": "#00a572",
+                        "on-secondary-container": "#c4abff",
+                        "inverse-primary": "#005ac2",
+                        "error": "#ffb4ab",
+                        "on-background": "#e3e2e5",
+                        "on-primary-fixed": "#001a42",
+                        "surface-container-highest": "#343537",
+                        "on-tertiary": "#003824",
+                        "primary-container": "#4d8eff",
+                        "on-error": "#690005",
+                        "error-container": "#93000a",
+                        "surface-variant": "#343537",
+                        "secondary-fixed-dim": "#d0bcff",
+                        "primary-fixed-dim": "#adc6ff",
+                        "primary": "#adc6ff",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "tertiary": "#4edea3",
+                        "on-secondary": "#3c0091",
+                        "inverse-surface": "#e3e2e5",
+                        "surface": "#121315",
+                        "on-error-container": "#ffdad6",
+                        "surface-bright": "#38393b",
+                        "secondary-container": "#571bc1",
+                        "surface-tint": "#adc6ff",
+                        "on-tertiary-container": "#00311f",
+                        "primary-fixed": "#d8e2ff",
+                        "surface-container-low": "#1b1c1e",
+                        "background": "#121315",
+                        "on-primary": "#002e6a",
+                        "on-surface-variant": "#c2c6d6",
+                        "on-primary-fixed-variant": "#004395",
+                        "surface-container-high": "#292a2c",
+                        "surface-container": "#1f2022",
+                        "on-surface": "#e3e2e5",
+                        "secondary-fixed": "#e9ddff",
+                        "tertiary-fixed": "#6ffbbe",
+                        "surface-container-lowest": "#0d0e10",
+                        "secondary": "#d0bcff",
+                        "on-primary-container": "#00285d",
+                        "on-secondary-fixed": "#23005c",
+                        "surface-dim": "#121315",
+                        "inverse-on-surface": "#303033"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "margin-mobile": "16px",
+                        "gutter": "16px",
+                        "margin-desktop": "24px",
+                        "container-max": "1440px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "code-md": ["JetBrains Mono"],
+                        "body-lg": ["Inter"],
+                        "headline-xl": ["Inter"],
+                        "label-sm": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "code-md": ["14px", {"lineHeight": "20px", "fontWeight": "450"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-xl": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface min-h-screen flex flex-col font-body-md overflow-hidden">
+<!-- TopNavBar -->
+<header class="flex justify-between items-center w-full px-margin-desktop py-2 bg-surface border-b border-outline-variant fixed top-0 z-50">
+<div class="flex items-center gap-6">
+<span class="font-headline-lg text-headline-lg font-bold text-primary">Clever Dictate</span>
+<nav class="hidden md:flex gap-6 items-center">
+<a class="text-on-surface-variant font-label-sm text-label-sm hover:text-primary transition-colors" href="#">HUD</a>
+<a class="text-on-surface-variant font-label-sm text-label-sm hover:text-primary transition-colors" href="#">History</a>
+<a class="text-on-surface-variant font-label-sm text-label-sm hover:text-primary transition-colors" href="#">Nodes</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2 bg-surface-container rounded px-3 py-1.5 border border-outline-variant">
+<span class="material-symbols-outlined text-[18px] text-outline">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-md w-48 text-on-surface" placeholder="Search parameters..." type="text"/>
+</div>
+<div class="flex items-center gap-3">
+<button class="material-symbols-outlined p-2 text-on-surface-variant hover:text-primary transition-colors">account_tree</button>
+<button class="material-symbols-outlined p-2 text-on-surface-variant hover:text-primary transition-colors">sync</button>
+<button class="material-symbols-outlined p-2 text-on-surface-variant hover:text-primary transition-colors relative">
+                    notifications
+                    <span class="absolute top-2 right-2 w-2 h-2 bg-tertiary rounded-full"></span>
+</button>
+</div>
+<button class="bg-primary-container text-on-primary-container px-4 py-1.5 rounded-lg font-bold hover:opacity-80 transition-all duration-150">
+                Record
+            </button>
+<div class="w-8 h-8 rounded-full bg-surface-container-highest border border-outline-variant overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a technical software engineer in a high-tech office environment, lit by cold blue neon accents and soft desk lamps. The aesthetic is modern corporate dark mode with sharp focus and cinematic depth of field." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXN1AISVkYEXLvk6r_DF4DjGT3acEfapahtTdZjsrVEEbEu7_JIXnWq_UzJpFD59rKhnlRL_7JQ2Y-LWPWily8jddivcoolYBMH_KXGJhloALOwbPuzKSiU9FVyDPsHmcOPJaO_pHhwCcv_EW5dhRINt5R4FfWRQDIhNlHWP7erj9KFzf1zx5ffT1Um6c4A53sTVIDxO5A3EsZNIQCs5uZY455XM_NxAr8j_MGVTri5_b7iSJG0A"/>
+</div>
+</div>
+</header>
+<div class="flex flex-1 pt-[57px]">
+<!-- SideNavBar -->
+<aside class="flex flex-col h-full p-4 gap-2 border-r border-outline-variant bg-surface-container-low w-[280px] hidden md:flex shrink-0">
+<div class="flex items-center gap-3 px-2 py-4 border-b border-outline-variant mb-2">
+<div class="w-10 h-10 rounded bg-secondary-container flex items-center justify-center text-on-secondary-container">
+<span class="material-symbols-outlined">dns</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-md text-headline-md text-on-surface text-[16px]">Local Node 01</span>
+<span class="font-label-sm text-label-sm text-tertiary">Local-First Active</span>
+</div>
+</div>
+<nav class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2.5 text-on-surface-variant hover:bg-surface-variant rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-sm text-label-sm">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 bg-secondary-container text-on-secondary-container font-bold rounded-lg scale-[0.98] transition-transform" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-sm text-label-sm">Settings</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-on-surface-variant hover:bg-surface-variant rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">admin_panel_settings</span>
+<span class="font-label-sm text-label-sm">Governance</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-on-surface-variant hover:bg-surface-variant rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">history</span>
+<span class="font-label-sm text-label-sm">Sessions</span>
+</a>
+</nav>
+<div class="mt-auto flex flex-col gap-1">
+<button class="bg-primary text-on-primary px-4 py-3 rounded-lg font-bold flex items-center justify-center gap-2 mb-4 hover:opacity-90 transition-all">
+<span class="material-symbols-outlined">add</span>
+                    New Dictation
+                </button>
+<a class="flex items-center gap-3 px-3 py-2.5 text-on-surface-variant hover:bg-surface-variant rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-label-sm text-label-sm">Docs</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-on-surface-variant hover:bg-surface-variant rounded-lg transition-all text-error" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="font-label-sm text-label-sm">Logout</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 overflow-y-auto bg-background p-margin-desktop">
+<div class="max-w-5xl mx-auto">
+<header class="mb-8">
+<h1 class="font-headline-xl text-headline-xl text-on-surface mb-2">System Configuration</h1>
+<p class="text-on-surface-variant text-body-lg">Control AI behavior, context mappings, and corporate linguistic rules.</p>
+</header>
+<!-- Tabbed Interface -->
+<div class="flex flex-col gap-8">
+<!-- Tabs Navigation -->
+<div class="flex border-b border-outline-variant gap-8 relative">
+<button class="pb-4 text-primary font-bold text-label-sm relative" id="tab-btn-language" onclick="switchTab('language')">
+                            LANGUAGE &amp; VOICE
+                            <div class="active-tab-indicator" id="indicator-language"></div>
+</button>
+<button class="pb-4 text-on-surface-variant hover:text-on-surface text-label-sm relative" id="tab-btn-context" onclick="switchTab('context')">
+                            CONTEXT PROMPTS
+                            <div class="active-tab-indicator hidden" id="indicator-context"></div>
+</button>
+<button class="pb-4 text-on-surface-variant hover:text-on-surface text-label-sm relative" id="tab-btn-dictionary" onclick="switchTab('dictionary')">
+                            CORPORATE DICTIONARY
+                            <div class="active-tab-indicator hidden" id="indicator-dictionary"></div>
+</button>
+</div>
+<!-- Frame 1: Language & Voice -->
+<section class="tab-content grid grid-cols-1 md:grid-cols-2 gap-8 animate-in fade-in duration-500" id="frame-language">
+<div class="space-y-6">
+<div class="flex flex-col gap-2">
+<label class="font-label-sm text-label-sm text-outline uppercase">Primary Capture Language</label>
+<div class="relative">
+<select class="w-full bg-surface-container border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:ring-2 focus:ring-primary appearance-none font-body-md">
+<option selected="">English (US) - DeepCapture Engine v4</option>
+<option>English (UK)</option>
+<option>German</option>
+<option>Japanese</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-outline">expand_more</span>
+</div>
+<p class="text-[12px] text-outline">Optimized for technical terminology and rapid speech patterns.</p>
+</div>
+<div class="flex flex-col gap-2">
+<label class="font-label-sm text-label-sm text-outline uppercase">Transcription Translation Target</label>
+<div class="relative">
+<select class="w-full bg-surface-container border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:ring-2 focus:ring-primary appearance-none font-body-md">
+<option>None (Original Language Only)</option>
+<option selected="">Spanish (Neutral) - Technical</option>
+<option>Mandarin (Simplified)</option>
+<option>French (Corporate)</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-outline">expand_more</span>
+</div>
+<p class="text-[12px] text-outline">Auto-translation runs in parallel with primary ingestion.</p>
+</div>
+</div>
+<div class="bg-surface-container-high rounded-xl p-6 glass-edge border border-outline-variant flex flex-col items-center justify-center text-center gap-4">
+<div class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[32px]">graphic_eq</span>
+</div>
+<div>
+<h3 class="font-headline-md text-headline-md mb-1">Voice Profile Active</h3>
+<p class="text-on-surface-variant text-body-md">Current model: <span class="text-tertiary">Whisper-CD-Large-3</span></p>
+</div>
+<div class="w-full h-12 bg-surface flex items-center justify-center overflow-hidden rounded border border-outline-variant">
+<!-- Waveform simulation -->
+<div class="flex items-center gap-1">
+<div class="w-1 h-4 bg-primary rounded-full animate-pulse"></div>
+<div class="w-1 h-8 bg-primary rounded-full animate-pulse" style="animation-delay: 0.1s"></div>
+<div class="w-1 h-6 bg-secondary rounded-full animate-pulse" style="animation-delay: 0.2s"></div>
+<div class="w-1 h-10 bg-primary rounded-full animate-pulse" style="animation-delay: 0.3s"></div>
+<div class="w-1 h-4 bg-secondary rounded-full animate-pulse" style="animation-delay: 0.4s"></div>
+<div class="w-1 h-7 bg-primary rounded-full animate-pulse" style="animation-delay: 0.5s"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Frame 2: Context Prompt Profiles -->
+<section class="tab-content hidden animate-in fade-in duration-500" id="frame-context">
+<div class="bg-surface-container rounded-xl border border-outline-variant overflow-hidden glass-edge">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-highest">
+<th class="px-6 py-3 font-label-sm text-label-sm text-outline uppercase border-b border-outline-variant">App Target Match</th>
+<th class="px-6 py-3 font-label-sm text-label-sm text-outline uppercase border-b border-outline-variant">Prompt Transform Profile</th>
+<th class="px-6 py-3 font-label-sm text-label-sm text-outline uppercase border-b border-outline-variant text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="font-body-md">
+<tr class="border-b border-outline-variant hover:bg-surface-container-high transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<span class="font-code-md text-code-md text-primary">Jira</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="relative max-w-xs">
+<select class="w-full bg-surface border border-outline-variant rounded px-3 py-1.5 text-body-md appearance-none">
+<option selected="">Scrum Master</option>
+<option>Developer TL;DR</option>
+<option>QA Incident Reporter</option>
+</select>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-primary hover:underline font-label-sm text-label-sm mr-4">Test</button>
+<button class="text-error hover:underline font-label-sm text-label-sm">Delete</button>
+</td>
+</tr>
+<tr class="border-b border-outline-variant hover:bg-surface-container-high transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="font-code-md text-code-md text-secondary">Slack</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="relative max-w-xs">
+<select class="w-full bg-surface border border-outline-variant rounded px-3 py-1.5 text-body-md appearance-none">
+<option>Executive Brief</option>
+<option selected="">Conversational Summary</option>
+</select>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-primary hover:underline font-label-sm text-label-sm mr-4">Test</button>
+<button class="text-error hover:underline font-label-sm text-label-sm">Delete</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-high transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<span class="font-code-md text-code-md text-tertiary">Confluence</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="relative max-w-xs">
+<select class="w-full bg-surface border border-outline-variant rounded px-3 py-1.5 text-body-md appearance-none">
+<option selected="">Documentation Architect</option>
+<option>Technical Spec</option>
+</select>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-primary hover:underline font-label-sm text-label-sm mr-4">Test</button>
+<button class="text-error hover:underline font-label-sm text-label-sm">Delete</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<button class="mt-6 flex items-center gap-2 px-4 py-2 bg-surface-container-highest border border-outline-variant rounded-lg font-label-sm text-label-sm hover:bg-outline-variant transition-colors">
+<span class="material-symbols-outlined">add_circle</span>
+                            Add Custom Context Mapping Rule
+                        </button>
+</section>
+<!-- Frame 3: Team Corporate Dictionary -->
+<section class="tab-content hidden animate-in fade-in duration-500" id="frame-dictionary">
+<!-- Sync Banner -->
+<div class="mb-6 flex items-center justify-between p-4 bg-tertiary-container/10 border border-tertiary/20 rounded-lg">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-tertiary" style="font-variation-settings: 'FILL' 1;">cloud_done</span>
+<p class="text-on-surface text-body-md">
+<span class="font-bold">Distributed Organization Dictionary:</span> Managed by Administrator. Updated 12 minutes ago.
+                                </p>
+</div>
+<button class="flex items-center gap-1 text-tertiary font-label-sm text-label-sm hover:underline">
+<span class="material-symbols-outlined text-[16px]">refresh</span>
+                                Force Sync
+                            </button>
+</div>
+<div class="grid grid-cols-1 gap-4">
+<div class="bg-surface-container rounded-xl border border-outline-variant overflow-hidden glass-edge">
+<div class="grid grid-cols-12 bg-surface-container-highest border-b border-outline-variant font-label-sm text-label-sm text-outline uppercase">
+<div class="col-span-5 px-6 py-3">Exact Jargon String</div>
+<div class="col-span-6 px-6 py-3">Target Replacement Word / Rule</div>
+<div class="col-span-1 px-6 py-3"></div>
+</div>
+<div class="max-h-[300px] overflow-y-auto">
+<!-- Row 1 -->
+<div class="grid grid-cols-12 border-b border-outline-variant hover:bg-surface-container-high transition-colors items-center">
+<div class="col-span-5 px-6 py-4 font-code-md text-primary">MAKGLOBAL</div>
+<div class="col-span-6 px-6 py-4 text-on-surface-variant italic">Replace with: <span class="text-on-surface not-italic font-bold">MAK Global Holdings Ltd.</span></div>
+<div class="col-span-1 px-6 py-4 text-right">
+<span class="material-symbols-outlined text-outline cursor-help" title="Corporate Rule: Locked">lock</span>
+</div>
+</div>
+<!-- Row 2 -->
+<div class="grid grid-cols-12 border-b border-outline-variant hover:bg-surface-container-high transition-colors items-center">
+<div class="col-span-5 px-6 py-4 font-code-md text-primary">PRJ-ALPHA</div>
+<div class="col-span-6 px-6 py-4 text-on-surface-variant italic">Replace with: <span class="text-on-surface not-italic font-bold">Project Alpha Nucleus</span></div>
+<div class="col-span-1 px-6 py-4 text-right">
+<span class="material-symbols-outlined text-outline cursor-help" title="Corporate Rule: Locked">lock</span>
+</div>
+</div>
+<!-- Row 3 -->
+<div class="grid grid-cols-12 border-b border-outline-variant hover:bg-surface-container-high transition-colors items-center">
+<div class="col-span-5 px-6 py-4 font-code-md text-primary">DEVOPS-SEC</div>
+<div class="col-span-6 px-6 py-4 text-on-surface-variant italic">Format as: <span class="text-on-surface not-italic font-bold">DevSecOps</span></div>
+<div class="col-span-1 px-6 py-4 text-right">
+<span class="material-symbols-outlined text-outline cursor-help" title="Corporate Rule: Locked">lock</span>
+</div>
+</div>
+<!-- Row 4 -->
+<div class="grid grid-cols-12 hover:bg-surface-container-high transition-colors items-center">
+<div class="col-span-5 px-6 py-4 font-code-md text-primary">S3-BUCKET-PRD</div>
+<div class="col-span-6 px-6 py-4 text-on-surface-variant italic">Case strictly: <span class="text-on-surface not-italic font-bold">s3-bucket-prd</span></div>
+<div class="col-span-1 px-6 py-4 text-right">
+<span class="material-symbols-outlined text-outline cursor-help" title="Corporate Rule: Locked">lock</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="p-6 bg-surface-container-low border border-outline-variant rounded-xl glass-edge">
+<h4 class="font-label-sm text-label-sm text-outline uppercase mb-2">Sync Status</h4>
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-tertiary shadow-[0_0_8px_#4ede3]"></div>
+<span class="text-body-md font-bold text-on-surface">Live-Feed Enabled</span>
+</div>
+</div>
+<div class="p-6 bg-surface-container-low border border-outline-variant rounded-xl glass-edge">
+<h4 class="font-label-sm text-label-sm text-outline uppercase mb-2">Total Mappings</h4>
+<div class="text-headline-md font-bold text-on-surface">1,248 Active</div>
+</div>
+<div class="p-6 bg-surface-container-low border border-outline-variant rounded-xl glass-edge">
+<h4 class="font-label-sm text-label-sm text-outline uppercase mb-2">Admin Overrides</h4>
+<div class="text-headline-md font-bold text-on-surface">Disabled</div>
+</div>
+</div>
+</section>
+</div>
+</div>
+</main>
+</div>
+<!-- BottomNavBar (Mobile Only) -->
+<footer class="md:hidden flex justify-around items-center w-full px-4 py-2 bg-surface-container border-t border-outline-variant fixed bottom-0 z-50 h-16">
+<button class="flex flex-col items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-[10px] font-label-sm">Home</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">settings</span>
+<span class="text-[10px] font-label-sm">Settings</span>
+</button>
+<div class="relative -top-6">
+<button class="bg-primary text-on-primary p-4 rounded-full shadow-lg border-4 border-background">
+<span class="material-symbols-outlined">mic</span>
+</button>
+</div>
+<button class="flex flex-col items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined">history</span>
+<span class="text-[10px] font-label-sm">Sessions</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-label-sm">Profile</span>
+</button>
+</footer>
+<script>
+        function switchTab(tabName) {
+            // Hide all frames
+            document.querySelectorAll('.tab-content').forEach(frame => {
+                frame.classList.add('hidden');
+            });
+            // Show selected frame
+            document.getElementById('frame-' + tabName).classList.remove('hidden');
+
+            // Update Tab Button Styles
+            document.querySelectorAll('[id^="tab-btn-"]').forEach(btn => {
+                btn.classList.remove('text-primary', 'font-bold');
+                btn.classList.add('text-on-surface-variant');
+            });
+            const activeBtn = document.getElementById('tab-btn-' + tabName);
+            activeBtn.classList.add('text-primary', 'font-bold');
+            activeBtn.classList.remove('text-on-surface-variant');
+
+            // Toggle indicators
+            document.querySelectorAll('[id^="indicator-"]').forEach(ind => {
+                ind.classList.add('hidden');
+            });
+            document.getElementById('indicator-' + tabName).classList.remove('hidden');
+        }
+    </script>
+</body></html>

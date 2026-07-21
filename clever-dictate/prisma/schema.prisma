@@ -1,0 +1,198 @@
+// Clever Dictate — relational data model.
+//
+// Design intent (see WRITEUP.md "Data model" for the full rationale):
+//  - Everything is scoped to an Organization. This is the unit of tenancy and
+//    the boundary for shared data, access control, and billing.
+//  - A User can belong to many orgs via Membership, which carries the ROLE.
+//    Auth identity (User) is deliberately separate from authorization
+//    (Membership.role) so the same person can be Admin in one org, User in another.
+//  - A Session is a named unit of team-shareable work (e.g. a debugging thread).
+//    A Dictation is one push-to-talk turn inside it, storing BOTH the raw STT
+//    text and the LLM-cleaned text plus the VLM screen context that enriched it.
+//  - ContextProfile + DictionaryEntry are org-shared config that steer the LLM.
+//  - AuditLog is an append-only ledger for governance/compliance.
+//
+// SQLite for local dev; the schema is Postgres-ready (swap `provider` + enums).
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ---------------------------------------------------------------------------
+// Tenancy & identity
+// ---------------------------------------------------------------------------
+
+model Organization {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String   @unique
+  createdAt DateTime @default(now())
+
+  members     Membership[]
+  sessions    Session[]
+  profiles    ContextProfile[]
+  dictionary  DictionaryEntry[]
+  auditLogs   AuditLog[]
+
+  // Governance toggles (Prompt 6, Quadrant D)
+  enforceE2EE        Boolean @default(false)
+  zeroDataRetention  Boolean @default(false)
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String
+  passwordHash String // scrypt hash; see lib/auth
+  createdAt    DateTime @default(now())
+
+  memberships Membership[]
+  sessions    Session[] // sessions this user created
+  dictations  Dictation[]
+  auditLogs   AuditLog[]
+  authSessions AuthSession[]
+}
+
+// Role is stored as a string constrained by the app (SQLite has no enums).
+// Values: "ADMIN" | "AUDITOR" | "USER"
+model Membership {
+  id     String @id @default(cuid())
+  role   String @default("USER")
+  userId String
+  orgId  String
+
+  user User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  org  Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, orgId])
+  @@index([orgId])
+}
+
+// Server-side session tokens for cookie auth.
+model AuthSession {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+// ---------------------------------------------------------------------------
+// Dictation domain
+// ---------------------------------------------------------------------------
+
+// A named, shareable thread of dictations — the unit of team handoff.
+model Session {
+  id        String   @id @default(cuid())
+  title     String
+  orgId     String
+  createdBy String
+  // Optional coarse category used by the sidebar filters ("VS Code", "Slack"...)
+  category  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  org        Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  creator    User         @relation(fields: [createdBy], references: [id])
+  dictations Dictation[]
+
+  @@index([orgId])
+  @@index([orgId, category])
+}
+
+// One push-to-talk turn. Stores the full provenance of the pipeline so a turn
+// is auditable and re-cleanable: screen context (VLM) + raw (STT) + clean (LLM).
+model Dictation {
+  id        String   @id @default(cuid())
+  sessionId String
+  authorId  String
+  createdAt DateTime @default(now())
+
+  // Stage 1–3: VLM screen context
+  appContext     String? // e.g. "VS Code" — the detected active application
+  contextSummary String? // VLM one-liner, e.g. "IDE editing README.md"
+  contextJson    String? // structured VLM output (bounding boxes / primitives) as JSON
+  screenshotRef  String? // pointer/thumbnail ref; raw image is NOT persisted by default
+
+  // Stage 4: raw STT
+  rawText String @default("")
+
+  // Stage 5: LLM cleanup
+  cleanText String @default("")
+
+  // Which providers actually produced this turn (for telemetry / reproducibility)
+  vlmProvider String?
+  sttProvider String?
+  llmProvider String?
+
+  // User edits after cleanup are tracked so we never silently overwrite intent.
+  editedText String?
+
+  session Session @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  author  User    @relation(fields: [authorId], references: [id])
+
+  @@index([sessionId])
+}
+
+// ---------------------------------------------------------------------------
+// Org-shared configuration that steers the LLM
+// ---------------------------------------------------------------------------
+
+// VLM->LLM router rule: "if the detected app matches X, apply prompt profile Y".
+model ContextProfile {
+  id          String  @id @default(cuid())
+  orgId       String
+  matchApp    String // substring/regex matched against VLM appContext, e.g. "Jira"
+  profileName String // human label, e.g. "Scrum Master"
+  prompt      String // the system prompt injected into LLM cleanup
+  enabled     Boolean @default(true)
+  createdAt   DateTime @default(now())
+
+  org Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+
+  @@index([orgId])
+}
+
+// Shared corporate dictionary: force exact spelling/casing of jargon.
+model DictionaryEntry {
+  id          String  @id @default(cuid())
+  orgId       String
+  term        String // spoken/heard form, e.g. "mac global"
+  replacement String // enforced form, e.g. "MAKGLOBAL"
+  createdAt   DateTime @default(now())
+
+  org Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+
+  @@unique([orgId, term])
+  @@index([orgId])
+}
+
+// ---------------------------------------------------------------------------
+// Governance
+// ---------------------------------------------------------------------------
+
+// Append-only audit ledger (Prompt 6, Quadrant B).
+model AuditLog {
+  id        String   @id @default(cuid())
+  orgId     String
+  actorId   String?
+  action    String // e.g. "session.create", "profile.update", "dictionary.propagate"
+  target    String? // human-readable target description
+  createdAt DateTime @default(now())
+
+  org   Organization @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  actor User?        @relation(fields: [actorId], references: [id])
+
+  @@index([orgId, createdAt])
+}

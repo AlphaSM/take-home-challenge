@@ -33,6 +33,32 @@ Make this something everyone at the company could use safely, and show your reas
 
 ---
 
+## ⚡ This branch: the rebuild (start here)
+
+This branch (`rebuild/web-multiuser`) contains my submission: the prototype
+rebuilt as a **multi-tenant web app** (accounts, roles, shared sessions, audit
+ledger, VLM→STT→LLM pipeline) that also ships as **Docker** and a **desktop
+.exe**. My findings and reasoning are in [`WRITEUP.md`](./WRITEUP.md).
+
+```bash
+cd clever-dictate
+npm install
+npm run setup      # prisma generate + db push + seed demo org
+npm run dev        # http://localhost:3000 — login: admin@makglobal.com / password
+```
+
+No API keys, no GPU, no macOS needed — offline mock providers by default.
+Docker (`docker compose up --build`) and the Electron desktop build
+(`npm run desktop:prepare && npm run desktop:dist`) are documented in
+[`clever-dictate/README.md`](./clever-dictate/README.md). Tests: `npm test`
+(30), plus scripted end-to-end proof: `node scripts/test-stt.mjs` (audio
+pipeline) and `node scripts/simulate-day.mjs` (a full simulated enterprise
+day). Use-case catalogue: [`clever-dictate/USE_CASES.md`](./clever-dictate/USE_CASES.md).
+
+The original macOS prototype below is left untouched and still runs as before.
+
+---
+
 ## Running the prototype
 
 These notes cover the app as it stands today. They're rough on purpose, and tightening them is part of the exercise. If you take the app somewhere new, update this section to match what you built.

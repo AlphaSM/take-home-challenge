@@ -1,0 +1,16 @@
+node_modules/
+.next/
+out/
+build/
+*.log
+.env
+.env*.local
+prisma/*.db
+prisma/*.db-journal
+next-env.d.ts
+.DS_Store
+
+# Desktop packaging (Electron)
+desktop/dist/
+desktop/node_modules/
+desktop/resources/template.db

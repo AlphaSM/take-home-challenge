@@ -1,0 +1,28 @@
+node_modules
+.next
+.git
+.gitignore
+npm-debug.log*
+
+# Local env files — pass config via container environment instead.
+.env
+.env*.local
+
+# Local SQLite dev database (runtime DB lives on a mounted volume in the container).
+prisma/*.db
+prisma/*.db-journal
+
+# Editor/OS cruft
+.DS_Store
+*.log
+
+# Docs and design assets not needed inside the image
+designs
+README.md
+WRITEUP.md
+cookies.txt
+
+# Docker-related files themselves don't need to be in the build context recursively
+Dockerfile
+.dockerignore
+docker-compose.yml

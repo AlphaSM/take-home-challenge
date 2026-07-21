@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Clever Dictate // Enterprise Login</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "outline-variant": "#424754",
+                      "outline": "#8c909f",
+                      "on-tertiary-fixed": "#002113",
+                      "tertiary-fixed-dim": "#4edea3",
+                      "on-secondary-fixed-variant": "#5516be",
+                      "tertiary-container": "#00a572",
+                      "on-secondary-container": "#c4abff",
+                      "inverse-primary": "#005ac2",
+                      "error": "#ffb4ab",
+                      "on-background": "#e3e2e5",
+                      "on-primary-fixed": "#001a42",
+                      "surface-container-highest": "#343537",
+                      "on-tertiary": "#003824",
+                      "primary-container": "#4d8eff",
+                      "on-error": "#690005",
+                      "error-container": "#93000a",
+                      "surface-variant": "#343537",
+                      "secondary-fixed-dim": "#d0bcff",
+                      "primary-fixed-dim": "#adc6ff",
+                      "primary": "#adc6ff",
+                      "on-tertiary-fixed-variant": "#005236",
+                      "tertiary": "#4edea3",
+                      "on-secondary": "#3c0091",
+                      "inverse-surface": "#e3e2e5",
+                      "surface": "#121315",
+                      "on-error-container": "#ffdad6",
+                      "surface-bright": "#38393b",
+                      "secondary-container": "#571bc1",
+                      "surface-tint": "#adc6ff",
+                      "on-tertiary-container": "#00311f",
+                      "primary-fixed": "#d8e2ff",
+                      "surface-container-low": "#1b1c1e",
+                      "background": "#121315",
+                      "on-primary": "#002e6a",
+                      "on-surface-variant": "#c2c6d6",
+                      "on-primary-fixed-variant": "#004395",
+                      "surface-container-high": "#292a2c",
+                      "surface-container": "#1f2022",
+                      "on-surface": "#e3e2e5",
+                      "secondary-fixed": "#e9ddff",
+                      "tertiary-fixed": "#6ffbbe",
+                      "surface-container-lowest": "#0d0e10",
+                      "secondary": "#d0bcff",
+                      "on-primary-container": "#00285d",
+                      "on-secondary-fixed": "#23005c",
+                      "surface-dim": "#121315",
+                      "inverse-on-surface": "#303033"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "unit": "4px",
+                      "margin-mobile": "16px",
+                      "gutter": "16px",
+                      "margin-desktop": "24px",
+                      "container-max": "1440px"
+              },
+              "fontFamily": {
+                      "headline-md": ["Inter"],
+                      "body-md": ["Inter"],
+                      "headline-lg": ["Inter"],
+                      "code-md": ["JetBrains Mono"],
+                      "body-lg": ["Inter"],
+                      "headline-xl": ["Inter"],
+                      "label-sm": ["JetBrains Mono"]
+              },
+              "fontSize": {
+                      "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "code-md": ["14px", {"lineHeight": "20px", "fontWeight": "450"}],
+                      "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-xl": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        body {
+            background-color: #0A0B0D;
+            color: #E3E2E5;
+            -webkit-font-smoothing: antialiased;
+        }
+        .glass-edge {
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        }
+        .input-focus-ring:focus {
+            border-color: #3B82F6;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+        }
+        .mono-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-margin-mobile md:p-margin-desktop overflow-hidden">
+<!-- Background Atmospheric Effect -->
+<div class="fixed inset-0 pointer-events-none z-0">
+
+</div>
+<!-- Centralized Login Container -->
+<main class="relative z-10 w-full max-w-[440px]">
+<div class="bg-surface-container-low glass-edge rounded-lg p-8 md:p-10 space-y-8">
+<!-- Header Section -->
+<header class="text-center space-y-4">
+<div class="flex justify-center">
+<div class="w-16 h-16 bg-surface-container-highest rounded-xl flex items-center justify-center glass-edge">
+<span class="material-symbols-outlined text-primary text-4xl" style="font-variation-settings: 'FILL' 0;">all_inclusive</span>
+</div>
+</div>
+<div class="space-y-1">
+<h1 class="font-code-md text-code-md text-primary tracking-widest">CLEVER DICTATE // ENTERPRISE</h1>
+<p class="font-body-md text-on-surface-variant opacity-70">Unified Local-First Intelligence</p>
+</div>
+</header>
+<!-- Authentication Form -->
+<form class="space-y-6" onsubmit="event.preventDefault();">
+<!-- Email Field -->
+<div class="space-y-2">
+<label class="mono-label text-on-surface-variant block" for="email">Corporate Email</label>
+<div class="relative">
+<input class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-4 py-3 font-body-md text-on-surface placeholder:text-outline input-focus-ring transition-all" id="email" placeholder="name@company.com" type="email"/>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline text-lg">alternate_email</span>
+</div>
+</div>
+<!-- Password Field -->
+<div class="space-y-2">
+<div class="flex justify-between items-center">
+<label class="mono-label text-on-surface-variant block" for="password">Master Password</label>
+<a class="font-label-sm text-primary hover:underline" href="#">Reset Node Key</a>
+</div>
+<div class="relative">
+<input class="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-4 py-3 font-body-md text-on-surface placeholder:text-outline input-focus-ring transition-all" id="password" placeholder="••••••••••••" type="password"/>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline text-lg">lock</span>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="space-y-4 pt-2">
+<button class="w-full bg-secondary-container text-on-secondary-container font-bold py-4 rounded-lg flex items-center justify-center gap-2 hover:brightness-110 active:scale-[0.98] transition-all" type="submit">
+<span>Send Passwordless Magic Link</span>
+<span class="material-symbols-outlined text-xl">auto_fix_high</span>
+</button>
+<div class="flex items-center gap-4 py-2">
+<div class="h-[1px] flex-1 bg-outline-variant"></div>
+<span class="mono-label text-outline text-[10px]">OR SECURE PROVIDER</span>
+<div class="h-[1px] flex-1 bg-outline-variant"></div>
+</div>
+<button class="w-full bg-primary text-on-primary font-bold py-4 rounded-lg flex items-center justify-center gap-3 hover:brightness-110 active:scale-[0.98] transition-all border border-white/10" type="button">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">shield_person</span>
+<span>Sign In with Corporate Identity (SSO / SAML 2.0)</span>
+</button>
+</div>
+</form>
+<!-- Footer / Status Notice -->
+<footer class="pt-6 border-t border-outline-variant/30">
+<div class="bg-tertiary-container/10 border border-tertiary-container/30 rounded px-4 py-3 flex gap-3 items-start">
+<span class="material-symbols-outlined text-tertiary mt-0.5">wifi_off</span>
+<p class="font-label-sm text-tertiary-fixed leading-tight">
+                        Offline Mode Active: Local Auth Token Valid. You can log in and dictate sessions; cloud sync will resume once node connectivity is restored.
+                    </p>
+</div>
+<div class="mt-6 flex justify-center gap-6">
+<a class="mono-label text-[10px] text-outline hover:text-primary transition-colors" href="#">Documentation</a>
+<a class="mono-label text-[10px] text-outline hover:text-primary transition-colors" href="#">Security Audit</a>
+<a class="mono-label text-[10px] text-outline hover:text-primary transition-colors" href="#">Node Status</a>
+</div>
+</footer>
+</div>
+<!-- System Meta Info -->
+<div class="mt-8 flex justify-between items-center px-4">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></div>
+<span class="font-label-sm text-outline">ENCRYPTION: AES-256 GCM</span>
+</div>
+<span class="font-label-sm text-outline opacity-50">v4.2.1-ENTERPRISE</span>
+</div>
+</main>
+<!-- UI Interaction Script -->
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const inputs = document.querySelectorAll('input');
+            inputs.forEach(input => {
+                input.addEventListener('focus', () => {
+                    input.parentElement.previousElementSibling.classList.add('text-primary');
+                });
+                input.addEventListener('blur', () => {
+                    input.parentElement.previousElementSibling.classList.remove('text-primary');
+                });
+            });
+        });
+    </script>
+</body></html>

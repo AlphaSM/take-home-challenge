@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Clever Dictate | Super Admin &amp; Data Governance</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            background-color: #0A0B0D;
+            color: #e3e2e5;
+            font-family: 'Inter', sans-serif;
+        }
+        .glass-edge {
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .top-highlight {
+            border-top: 1px solid rgba(255, 255, 255, 0.12);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #0d0e10;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #343537;
+            border-radius: 2px;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline-variant": "#424754",
+                        "outline": "#8c909f",
+                        "on-tertiary-fixed": "#002113",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "on-secondary-fixed-variant": "#5516be",
+                        "tertiary-container": "#00a572",
+                        "on-secondary-container": "#c4abff",
+                        "inverse-primary": "#005ac2",
+                        "error": "#ffb4ab",
+                        "on-background": "#e3e2e5",
+                        "on-primary-fixed": "#001a42",
+                        "surface-container-highest": "#343537",
+                        "on-tertiary": "#003824",
+                        "primary-container": "#4d8eff",
+                        "on-error": "#690005",
+                        "error-container": "#93000a",
+                        "surface-variant": "#343537",
+                        "secondary-fixed-dim": "#d0bcff",
+                        "primary-fixed-dim": "#adc6ff",
+                        "primary": "#adc6ff",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "tertiary": "#4edea3",
+                        "on-secondary": "#3c0091",
+                        "inverse-surface": "#e3e2e5",
+                        "surface": "#121315",
+                        "on-error-container": "#ffdad6",
+                        "surface-bright": "#38393b",
+                        "secondary-container": "#571bc1",
+                        "surface-tint": "#adc6ff",
+                        "on-tertiary-container": "#00311f",
+                        "primary-fixed": "#d8e2ff",
+                        "surface-container-low": "#1b1c1e",
+                        "background": "#121315",
+                        "on-primary": "#002e6a",
+                        "on-surface-variant": "#c2c6d6",
+                        "on-primary-fixed-variant": "#004395",
+                        "surface-container-high": "#292a2c",
+                        "surface-container": "#1f2022",
+                        "on-surface": "#e3e2e5",
+                        "secondary-fixed": "#e9ddff",
+                        "tertiary-fixed": "#6ffbbe",
+                        "surface-container-lowest": "#0d0e10",
+                        "secondary": "#d0bcff",
+                        "on-primary-container": "#00285d",
+                        "on-secondary-fixed": "#23005c",
+                        "surface-dim": "#121315",
+                        "inverse-on-surface": "#303033"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "margin-mobile": "16px",
+                        "gutter": "16px",
+                        "margin-desktop": "24px",
+                        "container-max": "1440px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "code-md": ["JetBrains Mono"],
+                        "body-lg": ["Inter"],
+                        "headline-xl": ["Inter"],
+                        "label-sm": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "headline-lg": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "code-md": ["14px", {"lineHeight": "20px", "fontWeight": "450"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-xl": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="flex overflow-hidden h-screen bg-surface-container-lowest">
+<!-- Sidebar Navigation -->
+<aside class="flex flex-col h-full p-4 gap-2 border-r border-outline-variant bg-surface-container-low w-[280px] shrink-0 hidden md:flex">
+<div class="mb-6 px-2">
+<h1 class="font-headline-md text-headline-md text-on-surface">Local Node 01</h1>
+<p class="font-label-sm text-label-sm text-outline">Local-First Active</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-variant rounded-lg transition-all font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+                Dashboard
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 bg-secondary-container text-on-secondary-container font-bold rounded-lg scale-[0.98] transition-transform font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined">admin_panel_settings</span>
+                Governance
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-variant rounded-lg transition-all font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined">history</span>
+                Sessions
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-variant rounded-lg transition-all font-body-md text-body-md" href="#">
+<span class="material-symbols-outlined">settings</span>
+                Settings
+            </a>
+</nav>
+<button class="mt-4 w-full py-2.5 bg-primary text-on-primary font-bold rounded-lg hover:opacity-90 transition-opacity">
+            New Dictation
+        </button>
+<div class="mt-auto pt-4 border-t border-outline-variant space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-variant rounded-lg font-label-sm text-label-sm transition-all" href="#">
+<span class="material-symbols-outlined text-[18px]">help</span>
+                Docs
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-on-surface-variant hover:bg-surface-variant rounded-lg font-label-sm text-label-sm transition-all" href="#">
+<span class="material-symbols-outlined text-[18px]">logout</span>
+                Logout
+            </a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col min-w-0 overflow-hidden relative">
+<!-- Background Animation Overlay -->
+
+<!-- Top Header -->
+<header class="flex justify-between items-center w-full px-margin-desktop py-2 bg-surface border-b border-outline-variant z-10">
+<div class="flex items-center gap-6">
+<span class="font-headline-lg text-headline-lg font-extrabold text-primary tracking-tight">Clever Dictate</span>
+<nav class="hidden md:flex gap-4 items-center">
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">HUD</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">History</a>
+<a class="font-label-sm text-label-sm text-primary border-b-2 border-primary pb-1" href="#">Governance</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center bg-surface-container h-8 px-3 rounded glass-edge">
+<span class="material-symbols-outlined text-outline text-[18px] mr-2">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-label-sm w-32 md:w-48 text-on-surface" placeholder="Search logs..." type="text"/>
+</div>
+<div class="flex gap-2">
+<span class="material-symbols-outlined text-on-surface-variant hover:text-primary cursor-pointer p-1">sync</span>
+<span class="material-symbols-outlined text-on-surface-variant hover:text-primary cursor-pointer p-1">notifications</span>
+<div class="w-8 h-8 rounded-full bg-surface-container-highest glass-edge flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a technical system administrator, rendered in a high-contrast cinematic style with cool blue lighting against a dark industrial background. The person has a focused expression, representing precision and technical authority. The image style is sharp and modern, matching a deep enterprise software dashboard aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCRPPqYUv_j3aY-8q-bKE5wtfxg8QN3h32E6DuJ1h_xiwU5boBl4jg7RY6pnwx_5tafrM6mzbNRNkmep3du_cgbsbxV_QiW4Ihj_AdJzEhS2zEo0VbPb0ndrd8Q84okWtP-6WULhp5CXtsWqJqeeShz8U5rwM_pddXJl9mNv7QsWLFB0sUy3zsCoTY_UfTUCofTzY2rEupJJNW68nJLpuiJ_LgFckd5zXRaE_usjggZ68chHpXpnw"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Quadrant Matrix Content -->
+<div class="flex-1 overflow-y-auto p-gutter custom-scrollbar z-10">
+<div class="max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-gutter h-full">
+<!-- Quadrant A: User Directory & RBAC -->
+<section class="flex flex-col bg-surface-container-low glass-edge top-highlight rounded-lg overflow-hidden min-h-[400px]">
+<div class="p-4 border-b border-outline-variant flex justify-between items-center bg-surface-container">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">group</span>
+<h2 class="font-headline-md text-headline-md">User Directory &amp; RBAC</h2>
+</div>
+<span class="font-label-sm text-label-sm px-2 py-1 bg-surface-container-highest rounded text-outline uppercase tracking-widest">Active: 1,420</span>
+</div>
+<div class="flex-1 overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-highest">
+<tr>
+<th class="p-3 font-label-sm text-label-sm text-outline border-b border-outline-variant">IDENTITY</th>
+<th class="p-3 font-label-sm text-label-sm text-outline border-b border-outline-variant">DEVICES</th>
+<th class="p-3 font-label-sm text-label-sm text-outline border-b border-outline-variant">ROLE</th>
+<th class="p-3 font-label-sm text-label-sm text-outline border-b border-outline-variant">TOKEN STATUS</th>
+</tr>
+</thead>
+<tbody class="font-body-md text-body-md divide-y divide-outline-variant">
+<tr class="hover:bg-surface-container transition-colors">
+<td class="p-3 flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-primary-container/20 flex items-center justify-center text-primary font-bold">MV</div>
+<span>Marcus.V</span>
+</td>
+<td class="p-3 font-code-md text-code-md text-on-surface-variant">MacBook-Pro, iPhone-15</td>
+<td class="p-3"><span class="px-2 py-0.5 rounded bg-tertiary-container/10 text-tertiary border border-tertiary/20 text-[11px] font-bold uppercase">Auditor</span></td>
+<td class="p-3 flex items-center gap-2 text-tertiary">
+<span class="w-2 h-2 rounded-full bg-tertiary shadow-[0_0_8px_rgba(78,222,163,0.6)]"></span>
+                                        Active
+                                    </td>
+</tr>
+<tr class="hover:bg-surface-container transition-colors">
+<td class="p-3 flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-secondary-container/20 flex items-center justify-center text-secondary font-bold">SL</div>
+<span>Sarah.L</span>
+</td>
+<td class="p-3 font-code-md text-code-md text-on-surface-variant">Workstation-X1</td>
+<td class="p-3"><span class="px-2 py-0.5 rounded bg-secondary-container/20 text-secondary border border-secondary/20 text-[11px] font-bold uppercase">Admin</span></td>
+<td class="p-3 flex items-center gap-2 text-tertiary">
+<span class="w-2 h-2 rounded-full bg-tertiary shadow-[0_0_8px_rgba(78,222,163,0.6)]"></span>
+                                        Active
+                                    </td>
+</tr>
+<tr class="hover:bg-surface-container transition-colors">
+<td class="p-3 flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-surface-variant flex items-center justify-center text-outline font-bold">DK</div>
+<span>Dev.K</span>
+</td>
+<td class="p-3 font-code-md text-code-md text-on-surface-variant">iPad-Air, Linux-MT</td>
+<td class="p-3"><span class="px-2 py-0.5 rounded bg-surface-variant text-on-surface-variant border border-outline/20 text-[11px] font-bold uppercase">User</span></td>
+<td class="p-3 flex items-center gap-2 text-error">
+<span class="w-2 h-2 rounded-full bg-error"></span>
+                                        Revoked
+                                    </td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- Quadrant B: System Audit Ledger -->
+<section class="flex flex-col bg-surface-container-low glass-edge top-highlight rounded-lg overflow-hidden min-h-[400px]">
+<div class="p-4 border-b border-outline-variant flex justify-between items-center bg-surface-container">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">history_edu</span>
+<h2 class="font-headline-md text-headline-md">System Audit Ledger</h2>
+</div>
+<button class="font-label-sm text-label-sm text-primary hover:underline">Export Logs</button>
+</div>
+<div class="flex-1 p-4 overflow-y-auto custom-scrollbar bg-surface-container-lowest/50">
+<div class="space-y-4 relative before:absolute before:left-3 before:top-2 before:bottom-2 before:w-[1px] before:bg-outline-variant">
+<!-- Timeline Entry -->
+<div class="relative pl-8 group">
+<div class="absolute left-1.5 top-1.5 w-3 h-3 rounded-full bg-primary border-4 border-surface shadow-[0_0_8px_rgba(173,198,255,0.6)]"></div>
+<div class="font-label-sm text-label-sm text-outline flex justify-between mb-1">
+<span>Today, 14:22:04</span>
+<span class="font-code-md text-secondary">0xFD21..44</span>
+</div>
+<div class="bg-surface-container p-3 rounded glass-edge group-hover:bg-surface-container-high transition-colors">
+<p class="font-body-md text-body-md text-on-surface">User <span class="font-code-md text-primary">Marcus.V</span> modified VLM context schema in <code class="bg-black/30 px-1 rounded">dictate-v4-core</code>.</p>
+</div>
+</div>
+<!-- Timeline Entry -->
+<div class="relative pl-8 group opacity-80">
+<div class="absolute left-1.5 top-1.5 w-3 h-3 rounded-full bg-outline border-4 border-surface"></div>
+<div class="font-label-sm text-label-sm text-outline flex justify-between mb-1">
+<span>Today, 12:45:12</span>
+<span class="font-code-md text-secondary">0xAC31..89</span>
+</div>
+<div class="bg-surface-container p-3 rounded glass-edge group-hover:bg-surface-container-high transition-colors">
+<p class="font-body-md text-body-md text-on-surface">Global policy update: <span class="text-tertiary">E2EE-ENFORCED</span> set to <code class="bg-black/30 px-1 rounded text-tertiary">true</code>.</p>
+</div>
+</div>
+<!-- Timeline Entry -->
+<div class="relative pl-8 group opacity-60">
+<div class="absolute left-1.5 top-1.5 w-3 h-3 rounded-full bg-outline border-4 border-surface"></div>
+<div class="font-label-sm text-label-sm text-outline flex justify-between mb-1">
+<span>Yesterday, 23:59:59</span>
+<span class="font-code-md text-secondary">0xB122..12</span>
+</div>
+<div class="bg-surface-container p-3 rounded glass-edge group-hover:bg-surface-container-high transition-colors">
+<p class="font-body-md text-body-md text-on-surface">System backup initiated: Node_01 state snapshotted to Local Hardware.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Quadrant C: Telemetry -->
+<section class="flex flex-col bg-surface-container-low glass-edge top-highlight rounded-lg overflow-hidden lg:col-span-2">
+<div class="p-4 border-b border-outline-variant flex justify-between items-center bg-surface-container">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">monitoring</span>
+<h2 class="font-headline-md text-headline-md">Telemetry &amp; Resource Efficiency</h2>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-4 p-4">
+<!-- Graph Container -->
+<div class="lg:col-span-2 bg-surface-container-lowest rounded-lg glass-edge p-6 relative overflow-hidden">
+<div class="flex justify-between items-end mb-4">
+<div>
+<p class="font-label-sm text-label-sm text-outline uppercase mb-1">Cloud Inference API Tokens</p>
+<h3 class="font-headline-xl text-headline-xl">4.2M <span class="text-body-md font-normal text-outline">/mo</span></h3>
+</div>
+<div class="flex gap-2">
+<div class="flex items-center gap-1 font-label-sm text-label-sm text-error">
+<span class="material-symbols-outlined text-[16px]">trending_up</span>
+                                        12%
+                                    </div>
+</div>
+</div>
+<!-- Simple SVG Waveform Graph -->
+<div class="h-32 w-full mt-4">
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 1000 100">
+<defs>
+<lineargradient id="line-gradient" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#3B82F6" stop-opacity="0.3"></stop>
+<stop offset="100%" stop-color="#3B82F6" stop-opacity="0"></stop>
+</lineargradient>
+</defs>
+<path d="M0,80 Q100,20 200,60 T400,40 T600,70 T800,30 L1000,50 L1000,100 L0,100 Z" fill="url(#line-gradient)"></path>
+<path d="M0,80 Q100,20 200,60 T400,40 T600,70 T800,30 L1000,50" fill="none" stroke="#3B82F6" stroke-width="2"></path>
+</svg>
+</div>
+</div>
+<!-- Comparison Card -->
+<div class="flex flex-col gap-4">
+<div class="bg-surface-container-high rounded-lg glass-edge p-5 flex-1 flex flex-col justify-center border-l-4 border-tertiary">
+<p class="font-label-sm text-label-sm text-outline uppercase mb-1">Local Hardware Compute</p>
+<h3 class="font-headline-lg text-headline-lg text-tertiary">12,482 Hours</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2">Saved via Edge-Inference caching.</p>
+</div>
+<div class="bg-surface-container-high rounded-lg glass-edge p-5 flex-1 flex flex-col justify-center border-l-4 border-primary">
+<p class="font-label-sm text-label-sm text-outline uppercase mb-1">Inference Latency</p>
+<h3 class="font-headline-lg text-headline-lg text-primary">124ms <span class="text-body-md font-normal text-outline">avg</span></h3>
+<div class="w-full bg-black/20 h-1.5 rounded-full mt-3 overflow-hidden">
+<div class="bg-primary h-full w-[65%]"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Quadrant D: Privacy & Encryption -->
+<section class="flex flex-col bg-surface-container-low glass-edge top-highlight rounded-lg overflow-hidden lg:col-span-2">
+<div class="p-4 border-b border-outline-variant bg-surface-container">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">verified_user</span>
+<h2 class="font-headline-md text-headline-md">Privacy &amp; Encryption Hardening</h2>
+</div>
+</div>
+<div class="p-gutter grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Toggle Component 1 -->
+<div class="flex items-start gap-4 p-4 bg-surface-container-lowest rounded-lg border border-outline-variant hover:border-primary/50 transition-colors">
+<div class="mt-1">
+<div class="relative inline-flex h-6 w-11 items-center rounded-full bg-tertiary cursor-pointer">
+<span class="inline-block h-4 w-4 translate-x-6 rounded-full bg-surface-container transition-transform"></span>
+</div>
+</div>
+<div class="flex-1">
+<h4 class="font-body-lg text-body-lg text-on-surface font-bold">Client-Side E2EE</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">Force all dictation nodes to encrypt audio locally before any network transit. Keys never leave the local node.</p>
+<div class="mt-2 flex items-center gap-2 font-code-md text-code-md text-tertiary">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">lock</span>
+                                    AES-256-GCM Active
+                                </div>
+</div>
+</div>
+<!-- Toggle Component 2 -->
+<div class="flex items-start gap-4 p-4 bg-surface-container-lowest rounded-lg border border-outline-variant hover:border-error/50 transition-colors">
+<div class="mt-1">
+<div class="relative inline-flex h-6 w-11 items-center rounded-full bg-outline-variant cursor-pointer">
+<span class="inline-block h-4 w-4 translate-x-1 rounded-full bg-surface-container transition-transform"></span>
+</div>
+</div>
+<div class="flex-1">
+<h4 class="font-body-lg text-body-lg text-on-surface font-bold">Zero Data Retention Mode</h4>
+<p class="font-body-md text-body-md text-on-surface-variant">Immediately purge all processing artifacts from temporary cloud memory after synthesis completes.</p>
+<div class="mt-2 flex items-center gap-2 font-code-md text-code-md text-outline">
+<span class="material-symbols-outlined text-[14px]">auto_delete</span>
+                                    Currently Disabled
+                                </div>
+</div>
+</div>
+</div>
+<div class="px-gutter pb- gutter">
+<div class="bg-error/10 border border-error/20 p-4 rounded-lg flex items-center gap-4">
+<span class="material-symbols-outlined text-error">warning</span>
+<p class="font-body-md text-body-md text-error">Warning: Modifying "Client-Side E2EE" will invalidate 12 active legacy sessions on node <span class="font-bold">cluster-prod-04</span>.</p>
+</div>
+</div>
+</section>
+</div>
+</div>
+<!-- Floating Action Button - Supressed on Admin screens as per guidance, but using a footer-like summary bar instead -->
+<footer class="h-12 bg-surface-container flex items-center justify-between px-margin-desktop border-t border-outline-variant z-10">
+<div class="flex gap-4 items-center">
+<span class="font-label-sm text-label-sm flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span>
+                    System Integrity: Optimal
+                </span>
+<span class="font-label-sm text-label-sm text-outline">|</span>
+<span class="font-label-sm text-label-sm font-code-md">Uptime: 99.9992%</span>
+</div>
+<div class="flex gap-4">
+<span class="font-label-sm text-label-sm text-on-surface-variant">v2.4.1-stable</span>
+</div>
+</footer>
+</main>
+<!-- Mobile Navigation (Bottom Bar) -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-surface border-t border-outline-variant flex justify-around items-center z-50">
+<a class="flex flex-col items-center gap-1 text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-sm text-label-sm">Home</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">admin_panel_settings</span>
+<span class="font-label-sm text-label-sm font-bold">Gov</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">history</span>
+<span class="font-label-sm text-label-sm">Logs</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-sm text-label-sm">Set</span>
+</a>
+</nav>
+<script>
+        // Micro-interaction for Toggles
+        document.querySelectorAll('.cursor-pointer').forEach(toggle => {
+            toggle.addEventListener('click', function() {
+                const dot = this.querySelector('span');
+                const isOff = dot.classList.contains('translate-x-1');
+                
+                if (isOff) {
+                    dot.classList.replace('translate-x-1', 'translate-x-6');
+                    this.classList.replace('bg-outline-variant', 'bg-tertiary');
+                } else {
+                    dot.classList.replace('translate-x-6', 'translate-x-1');
+                    this.classList.replace('bg-tertiary', 'bg-outline-variant');
+                }
+            });
+        });
+
+        // Simulating audit log stream
+        const auditContainer = document.querySelector('.space-y-4');
+        setInterval(() => {
+            // Optional: Logic to add new log items could go here to demonstrate "High Density" feed
+        }, 15000);
+    </script>
+</body></html>

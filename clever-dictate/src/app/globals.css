@@ -1,0 +1,63 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body {
+  background-color: #0a0b0d;
+  color: #e3e2e5;
+  font-family: "Inter", system-ui, sans-serif;
+}
+
+@layer components {
+  /* 1px inner border — the "glass-cut" edge used instead of shadows. */
+  .glass-edge {
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .top-highlight {
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+  }
+  .card {
+    @apply bg-surface glass-edge top-highlight rounded-lg;
+  }
+  .btn-primary {
+    @apply bg-core text-white rounded px-4 py-2 text-sm font-medium transition-colors hover:bg-blue-500 disabled:opacity-40 disabled:cursor-not-allowed;
+  }
+  .btn-ghost {
+    @apply rounded border border-core/70 px-4 py-2 text-sm font-medium text-core transition-colors hover:bg-core/10;
+  }
+  .btn-tool {
+    @apply bg-surface glass-edge rounded px-3 py-1.5 font-mono text-xs text-secondary transition-colors hover:text-dominant;
+  }
+  .field {
+    @apply w-full rounded bg-base glass-edge px-3 py-2 text-sm text-dominant outline-none transition focus:border-core focus:ring-2 focus:ring-core/40;
+  }
+  .label {
+    @apply mb-1.5 block font-mono text-[11px] uppercase tracking-wider text-secondary;
+  }
+  .chip-success {
+    @apply inline-flex items-center gap-1.5 rounded bg-success/10 px-2 py-0.5 text-xs font-medium text-success;
+  }
+  .chip-vision {
+    @apply inline-flex items-center gap-1.5 rounded bg-vision/10 px-2 py-0.5 text-xs font-medium text-vision;
+  }
+}
+
+/* Thin custom scrollbars to match the command-center aesthetic. */
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+*::-webkit-scrollbar-track {
+  background: #0a0b0d;
+}
+*::-webkit-scrollbar-thumb {
+  background: #343537;
+  border-radius: 10px;
+}

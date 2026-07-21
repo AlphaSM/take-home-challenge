@@ -1,0 +1,64 @@
+name: Desktop
+
+# Builds the Electron desktop app for Windows (.exe) and macOS (.dmg/.zip).
+# Runs on demand and on version tags; artifacts are attached to the run.
+on:
+  workflow_dispatch:
+  push:
+    tags: ["v*"]
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            script: dist:win
+            artifact: clever-dictate-windows
+            path: |
+              desktop/dist/*.exe
+          - os: macos-latest
+            script: dist:mac
+            artifact: clever-dictate-macos
+            path: |
+              desktop/dist/*.dmg
+              desktop/dist/*.zip
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install web dependencies
+        run: npm ci
+
+      - name: Build web app (standalone)
+        run: npm run build
+        env:
+          DATABASE_URL: file:./ci.db
+          AUTH_SECRET: ci
+
+      - name: Install desktop dependencies
+        run: npm ci
+        working-directory: desktop
+
+      - name: Prepare seeded template database
+        run: npm run prepare-db
+        working-directory: desktop
+
+      - name: Package desktop app
+        run: npm run ${{ matrix.script }}
+        working-directory: desktop
+        env:
+          # Disable code signing on CI (no certs configured yet).
+          CSC_IDENTITY_AUTO_DISCOVERY: "false"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+          path: ${{ matrix.path }}
+          if-no-files-found: error
