@@ -1,6 +1,6 @@
 import type { VlmProvider, LlmProvider, SttProvider } from "./types";
 import { mockVlm, mockLlm, mockStt } from "./mock";
-import { anthropicLlm, geminiVlm, openaiWhisperStt } from "./cloud";
+import { anthropicLlm, geminiLlm, geminiVlm, geminiStt, openaiWhisperStt } from "./cloud";
 
 // Provider registry. Selection is driven by env so ops can flip between
 // offline mocks and cloud APIs without code changes. Any construction error
@@ -19,6 +19,7 @@ export function getVlm(): VlmProvider {
 export function getLlm(): LlmProvider {
   const choice = (process.env.LLM_PROVIDER ?? "mock").toLowerCase();
   try {
+    if (choice === "gemini") return geminiLlm();
     if (choice === "anthropic") return anthropicLlm();
   } catch (e) {
     console.warn(`[ai] LLM '${choice}' unavailable, using mock:`, (e as Error).message);
@@ -31,6 +32,7 @@ export function getStt(): SttProvider {
   // and has no server-side meaning — treat it the same as "mock" here.
   const choice = (process.env.STT_PROVIDER ?? "mock").toLowerCase();
   try {
+    if (choice === "gemini") return geminiStt();
     if (choice === "openai") return openaiWhisperStt();
   } catch (e) {
     console.warn(`[ai] STT '${choice}' unavailable, using mock:`, (e as Error).message);
