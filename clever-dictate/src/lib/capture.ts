@@ -40,12 +40,24 @@ async function grabFrame(): Promise<string> {
   });
   try {
     const track = stream.getVideoTracks()[0];
-    // Give the frame a beat to paint.
-    await new Promise((r) => setTimeout(r, 200));
 
     const video = document.createElement("video");
     video.srcObject = stream;
+    // Muted + inline, or autoplay policy can reject play() and we'd lose the
+    // frame even though the user granted the picker.
+    video.muted = true;
+    video.playsInline = true;
     await video.play();
+
+    // Wait for an actual decoded frame — a fixed sleep can grab a black frame
+    // before the first paint (especially for freshly shared windows/screens).
+    await new Promise<void>((resolve) => {
+      const v = video as HTMLVideoElement & {
+        requestVideoFrameCallback?: (cb: () => void) => void;
+      };
+      if (v.requestVideoFrameCallback) v.requestVideoFrameCallback(() => resolve());
+      else setTimeout(resolve, 300);
+    });
 
     // Downscale to keep the payload small (max 1280px wide).
     const scale = Math.min(1, 1280 / (video.videoWidth || 1280));

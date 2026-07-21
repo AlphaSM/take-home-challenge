@@ -77,11 +77,18 @@ async function geminiGenerate(
     body.generationConfig = { responseMimeType: opts.responseMimeType };
   }
 
-  const res = await fetch(`${GEMINI_BASE}/${model}:generateContent`, {
-    method: "POST",
-    headers: { "content-type": "application/json", ...geminiAuthHeaders(key) },
-    body: JSON.stringify(body),
-  });
+  // 429/503 are transient (rate limit / "high demand") — retry briefly with
+  // backoff before giving up so one blip doesn't drop a whole pipeline stage.
+  let res: Response;
+  for (let attempt = 1; ; attempt++) {
+    res = await fetch(`${GEMINI_BASE}/${model}:generateContent`, {
+      method: "POST",
+      headers: { "content-type": "application/json", ...geminiAuthHeaders(key) },
+      body: JSON.stringify(body),
+    });
+    if (res.ok || attempt >= 3 || (res.status !== 429 && res.status !== 503)) break;
+    await new Promise((r) => setTimeout(r, 700 * attempt));
+  }
   if (!res.ok) throw new Error(`Gemini ${model} ${res.status}: ${await res.text()}`);
   const data = await res.json();
   const outParts = data.candidates?.[0]?.content?.parts ?? [];
