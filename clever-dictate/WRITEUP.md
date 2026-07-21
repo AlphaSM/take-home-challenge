@@ -201,6 +201,47 @@ tested on this machine: first-run seeds, second-run reuses the DB); the macOS
 Electron icon, and the desktop build currently bundles the full server — a
 future optimisation is pruning the standalone tree.
 
+## 6c. Live cloud pipeline (phase 4)
+
+All three stages now run on **live Google Gemini** (`generateContent` REST, no
+SDK): `geminiVlm` (screen context), `geminiLlm` (cleanup + suggestions),
+`geminiStt` (one-shot inline-audio transcription) — selected with
+`*_PROVIDER=gemini` and verified end-to-end (real WAV → verbatim transcript →
+context-aware cleanup; a rendered "Attention Is All You Need" screenshot →
+"PDF Reader / research paper …" with grounded primitives).
+
+Findings worth recording, since they shaped the design:
+
+- **Model availability is plan-dependent, and failure is silent by default.**
+  On a free-tier key, `gemini-3.1-pro` has quota 0 (billing-only) and
+  `gemini-2.5-flash` 404s for new users; `gemini-3.1-flash-live-preview` is a
+  WebSocket-only Live-API surface that 404s on `generateContent` entirely, so
+  it cannot serve a one-shot `transcribe(buffer)` interface. Defaults are
+  therefore `gemini-3.5-flash` everywhere (verified for text, vision *and*
+  audio), env-overridable per stage.
+- **Free-tier quotas are per-model buckets.** Exhausting the primary's request
+  quota surfaced as the mock's "Unknown Application (context unavailable
+  offline)" after a *successful* screen capture. The client now retries 429/503
+  honoring Google's `RetryInfo` delay, then walks `GEMINI_FALLBACK_MODELS`
+  (default `gemini-3.1-flash-lite`) before ever degrading to the mock — and
+  the `/api/vlm` route degrades to the mock at runtime instead of 500ing,
+  because the HUD swallows errors.
+- **Bugs the live path exposed that the mock hid:** the route passed the text
+  `hint` to the cloud VLM as base64 image bytes (guaranteed 400 — only the
+  mock understands text input); `grabFrame` played an unmuted video (autoplay
+  policy can reject it) and slept a fixed 200ms, capturing black first frames.
+  Screenshots now upload as JPEG (~5–10× smaller than PNG) after waiting for a
+  decoded frame via `requestVideoFrameCallback`.
+- **UX:** the VLM prompt demands concrete content description (titles,
+  headings, legible code — never "unknown" when text is readable), and the HUD
+  shows an animated "Cleaning & formatting with LLM…" state with actions
+  disabled while cleanup is in flight, since a live LLM takes visible seconds
+  where the mock was instant.
+- **Ops:** `.env.example` is committed (a fresh clone previously failed setup
+  with no `DATABASE_URL`); a second org ("Clever Profits",
+  `prisma/add-clever-org.ts`, additive + idempotent) exercises multi-tenancy
+  with real separate accounts; keys live only in gitignored `.env`.
+
 ## 7. Honest limitations of what I shipped
 
 - Session-level authorization is coarse (org-wide read). Fine for a demo, wrong
@@ -210,6 +251,11 @@ future optimisation is pruning the standalone tree.
 - Screen capture + Web Speech need a Chromium browser with a user gesture; the
   app degrades (app-picker dropdown, typed text) but the marquee experience
   assumes Chrome.
+- The live pipeline is quota-bound on free-tier Gemini keys (per-model request
+  caps); under sustained load it degrades fallback-model → mock rather than
+  queueing. Server-side STT is one-shot `generateContent`, not streaming — the
+  real-time path is still the browser's Web Speech API, and true Live-API
+  (WebSocket) STT would be a separate integration.
 
 ---
 

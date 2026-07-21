@@ -43,11 +43,16 @@ ledger, VLM→STT→LLM pipeline) that also ships as **Docker** and a **desktop
 ```bash
 cd clever-dictate
 npm install
-npm run setup      # prisma generate + db push + seed demo org
-npm run dev        # http://localhost:3000 — login: admin@makglobal.com / password
+cp .env.example .env   # required (DATABASE_URL); defaults = offline mocks
+npm run setup          # prisma generate + db push + seed demo org
+npm run dev            # http://localhost:3000 — login: admin@makglobal.com / password
 ```
 
-No API keys, no GPU, no macOS needed — offline mock providers by default.
+No API keys, no GPU, no macOS needed — offline mock providers by default. To
+run the whole VLM→STT→LLM pipeline on **live Gemini models**, set
+`GEMINI_API_KEY` and the three `*_PROVIDER=gemini` vars in `.env` (see
+[`clever-dictate/README.md`](./clever-dictate/README.md) for models, per-model
+quota fallback, and troubleshooting).
 Docker (`docker compose up --build`) and the Electron desktop build
 (`npm run desktop:prepare && npm run desktop:dist`) are documented in
 [`clever-dictate/README.md`](./clever-dictate/README.md). Tests: `npm test`
