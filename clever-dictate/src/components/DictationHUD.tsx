@@ -26,6 +26,7 @@ export function DictationHUD({
   const [appHint, setAppHint] = useState<string>("");
   const [raw, setRaw] = useState("");
   const [clean, setClean] = useState("");
+  const [cleaning, setCleaning] = useState(false);
   const [profileName, setProfileName] = useState<string | null>(null);
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -39,6 +40,7 @@ export function DictationHUD({
     setContext(null);
     setRaw("");
     setClean("");
+    setCleaning(false);
     setProfileName(null);
     setSuggestions([]);
     setError(null);
@@ -78,6 +80,7 @@ export function DictationHUD({
     setRaw(finalRaw);
     setPhase("review");
     if (!finalRaw.trim()) return;
+    setCleaning(true);
     try {
       const res = await fetch("/api/cleanup", {
         method: "POST",
@@ -89,6 +92,8 @@ export function DictationHUD({
       setProfileName(data.profileName ?? null);
     } catch {
       setClean(finalRaw);
+    } finally {
+      setCleaning(false);
     }
   }, [raw, context]);
 
@@ -197,7 +202,7 @@ export function DictationHUD({
 
             {/* Raw / clean text */}
             <div className="rounded bg-base glass-edge p-3">
-              {phase === "review" && clean ? (
+              {phase === "review" && (clean || cleaning) ? (
                 <div className="space-y-2">
                   <div>
                     <div className="label">Raw (Whisper)</div>
@@ -206,7 +211,9 @@ export function DictationHUD({
                   <div className="h-px bg-hairline" />
                   <div>
                     <div className="label text-core">Cleaned (LLM)</div>
-                    <p className="whitespace-pre-wrap text-sm text-dominant">{clean}</p>
+                    {cleaning ? <CleaningIndicator /> : (
+                      <p className="whitespace-pre-wrap text-sm text-dominant">{clean}</p>
+                    )}
                   </div>
                 </div>
               ) : (
@@ -233,13 +240,25 @@ export function DictationHUD({
               )}
               {phase === "review" && (
                 <>
-                  <button onClick={save} className="btn-primary">
+                  <button
+                    onClick={save}
+                    disabled={cleaning}
+                    className="btn-primary disabled:cursor-not-allowed disabled:opacity-40"
+                  >
                     Save turn
                   </button>
-                  <button onClick={copy} className="btn-tool">
+                  <button
+                    onClick={copy}
+                    disabled={cleaning}
+                    className="btn-tool disabled:cursor-not-allowed disabled:opacity-40"
+                  >
                     {copied ? "✓ Copied" : "⧉ Copy to clipboard"}
                   </button>
-                  <button onClick={loadSuggestions} className="btn-ghost">
+                  <button
+                    onClick={loadSuggestions}
+                    disabled={cleaning}
+                    className="btn-ghost disabled:cursor-not-allowed disabled:opacity-40"
+                  >
                     ✦ AI suggestions
                   </button>
                 </>
@@ -266,6 +285,26 @@ export function DictationHUD({
           </div>
         )}
       </div>
+    </div>
+  );
+}
+
+/** Animated placeholder shown while the LLM cleans & formats the transcript. */
+function CleaningIndicator() {
+  return (
+    <div className="flex items-center gap-2 py-1" role="status" aria-live="polite">
+      <span className="flex items-center gap-[3px]" aria-hidden>
+        {[0, 1, 2].map((i) => (
+          <span
+            key={i}
+            className="h-1.5 w-1.5 animate-bounce rounded-full bg-gradient-to-b from-core to-vision"
+            style={{ animationDelay: `${i * 0.15}s` }}
+          />
+        ))}
+      </span>
+      <span className="animate-pulse text-sm text-secondary">
+        Cleaning &amp; formatting with LLM…
+      </span>
     </div>
   );
 }
