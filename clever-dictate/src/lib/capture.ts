@@ -68,7 +68,9 @@ async function grabFrame(): Promise<string> {
     canvas.height = h;
     canvas.getContext("2d")!.drawImage(video, 0, 0, w, h);
     track.stop();
-    return canvas.toDataURL("image/png");
+    // JPEG keeps the payload ~5-10x smaller than PNG for screenshots, which
+    // matters for upload latency and the VLM request size.
+    return canvas.toDataURL("image/jpeg", 0.85);
   } finally {
     stream.getTracks().forEach((t) => t.stop());
   }

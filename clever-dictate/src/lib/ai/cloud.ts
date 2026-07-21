@@ -55,11 +55,29 @@ function geminiAuthHeaders(key: string): Record<string, string> {
     : { "x-goog-api-key": key };
 }
 
+// Free-tier quotas are per-model buckets, so when the primary model's request
+// quota is exhausted an alternate model usually still has headroom. Tried in
+// order after the primary; env-overridable (comma-separated).
+const GEMINI_FALLBACK_MODELS = (process.env.GEMINI_FALLBACK_MODELS ?? "gemini-3.1-flash-lite")
+  .split(",")
+  .map((s) => s.trim())
+  .filter(Boolean);
+
+/** Pull Google's suggested RetryInfo delay (seconds) out of a 429 body. */
+function retryDelayMs(errorText: string): number | null {
+  const m = errorText.match(/"retryDelay":\s*"(\d+(?:\.\d+)?)s"/i) ?? errorText.match(/retry in (\d+(?:\.\d+)?)s/i);
+  return m ? Math.ceil(parseFloat(m[1]) * 1000) : null;
+}
+
 /**
  * Minimal Gemini `generateContent` client. `parts` follows the REST contract:
  * `{text}` for prompts, `{inline_data:{mime_type,data}}` for image/audio bytes.
- * Returns the concatenated text of the first candidate. Throws on non-2xx so
- * the registry can degrade to the mock.
+ * Returns the concatenated text of the first candidate.
+ *
+ * Resilience: 429/503 retry honoring Google's RetryInfo delay (capped at 6s);
+ * if the model stays quota-limited (or 404s), the fallback models are tried
+ * before throwing — so the mock is a last resort, not the first response to a
+ * burst of traffic. Throws on persistent failure so callers can degrade.
  */
 async function geminiGenerate(
   model: string,
@@ -77,22 +95,34 @@ async function geminiGenerate(
     body.generationConfig = { responseMimeType: opts.responseMimeType };
   }
 
-  // 429/503 are transient (rate limit / "high demand") — retry briefly with
-  // backoff before giving up so one blip doesn't drop a whole pipeline stage.
-  let res: Response;
-  for (let attempt = 1; ; attempt++) {
-    res = await fetch(`${GEMINI_BASE}/${model}:generateContent`, {
-      method: "POST",
-      headers: { "content-type": "application/json", ...geminiAuthHeaders(key) },
-      body: JSON.stringify(body),
-    });
-    if (res.ok || attempt >= 3 || (res.status !== 429 && res.status !== 503)) break;
-    await new Promise((r) => setTimeout(r, 700 * attempt));
+  const models = [model, ...GEMINI_FALLBACK_MODELS.filter((m) => m !== model)];
+  let lastError = "";
+
+  for (const m of models) {
+    for (let attempt = 1; attempt <= 3; attempt++) {
+      const res = await fetch(`${GEMINI_BASE}/${m}:generateContent`, {
+        method: "POST",
+        headers: { "content-type": "application/json", ...geminiAuthHeaders(key) },
+        body: JSON.stringify(body),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        const outParts = data.candidates?.[0]?.content?.parts ?? [];
+        return outParts.map((p: { text?: string }) => p.text ?? "").join("").trim();
+      }
+      const errText = await res.text();
+      lastError = `Gemini ${m} ${res.status}: ${errText}`;
+      if (res.status === 404) break; // model not available on this key — next model
+      if (res.status !== 429 && res.status !== 503) throw new Error(lastError);
+      if (attempt < 3) {
+        const wait = Math.min(retryDelayMs(errText) ?? 700 * attempt, 6000);
+        await new Promise((r) => setTimeout(r, wait));
+      } else {
+        console.warn(`[ai] ${m} still ${res.status} after ${attempt} attempts, trying next model`);
+      }
+    }
   }
-  if (!res.ok) throw new Error(`Gemini ${model} ${res.status}: ${await res.text()}`);
-  const data = await res.json();
-  const outParts = data.candidates?.[0]?.content?.parts ?? [];
-  return outParts.map((p: { text?: string }) => p.text ?? "").join("").trim();
+  throw new Error(lastError || `Gemini: all models failed (${models.join(", ")})`);
 }
 
 /** Shared prompt construction for the cleanup stage. */
@@ -203,9 +233,14 @@ export function geminiVlm(): VlmProvider {
     name: "gemini",
     async describe(imageBase64): Promise<ScreenContext> {
       if (!imageBase64) throw new Error("gemini VLM requires an image");
+      const mime = imageBase64.match(/^data:(image\/\w+);base64,/)?.[1] ?? "image/png";
       const b64 = imageBase64.replace(/^data:image\/\w+;base64,/, "");
       const instruction =
-        "Identify the foreground application and what the user is doing. " +
+        "You are looking at a screenshot of the user's screen. Describe what you actually see. " +
+        '"appContext" = the foreground application or document type (e.g. "PDF Reader", "arXiv paper in Chrome", "VS Code"). ' +
+        '"summary" = one concrete sentence about the visible content itself — name titles, headings, subject matter, ' +
+        'or code you can read (e.g. \'Research paper "Attention Is All You Need", section 3.2 on multi-head attention\'). ' +
+        "If you cannot identify the application, still describe the visible content — never answer \"unknown\" when text or imagery is legible. " +
         'Respond with strict JSON: {"appContext": string, "summary": string, ' +
         '"primitives": [{"label": string, "bbox": [x,y,w,h] in 0..1}]}. No prose.';
       const raw = stripCodeFence(
@@ -213,7 +248,7 @@ export function geminiVlm(): VlmProvider {
           GEMINI_VLM_MODEL,
           [
             { text: instruction },
-            { inline_data: { mime_type: "image/png", data: b64 } },
+            { inline_data: { mime_type: mime, data: b64 } },
           ],
           { responseMimeType: "application/json" },
         ) || "{}",
